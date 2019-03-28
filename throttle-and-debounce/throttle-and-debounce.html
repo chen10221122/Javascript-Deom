@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Vue 测试实例 - 菜鸟教程(runoob.com)</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <style>
+        input {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <section>
+            <h4>无防抖&节流：</h4>
+            <input v-model="keyword0" type="text">
+            <p>{{ message0 }}</p>
+        </section>
+        <section>
+            <h4>函数防抖-非立即执行：</h4>
+            <input v-model="keyword1" type="text">
+            <p>{{ message1 }}</p>
+        </section>
+        <section>
+            <h4>函数防抖-立即执行：</h4>
+            <input v-model="keyword2" type="text">
+            <p>{{ message2 }}</p>
+        </section>
+        <section>
+            <h4>函数节流-定时器版-非立即执行：</h4>
+            <input v-model="keyword4" type="text">
+            <p>{{ message4 }}</p>
+        </section>
+        <section>
+            <h4>函数节流-时间戳版-立即执行：</h4>
+            <input v-model="keyword3" type="text">
+            <p>{{ message3 }}</p>
+        </section>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                message0: 'Hello World',
+                keyword0: '',
+                timer1: null,
+                message1: 'Hello World',
+                keyword1: '',
+                timer2: null,
+                message2: 'Hello World',
+                keyword2: '',
+                timer3: 0,
+                message3: 'Hello World',
+                keyword3: '',
+                timer4: null,
+                message4: 'Hello World',
+                keyword4: ''
+            },
+            watch: {
+                keyword0() {
+                    this.message0 = this.keyword0;
+                },
+                // 函数防抖-非立即执行
+                keyword1() {
+                    if (this.timer1) {
+                        clearTimeout(this.timer1);
+                    }
+                    this.timer1 = setTimeout(() => {
+                        this.message1 = this.keyword1;
+                    }, 800);
+                },
+                // 函数防抖-立即执行
+                keyword2() {
+                    if (this.timer2) {
+                        clearTimeout(this.timer2);
+                    }
+                    let callNow = !this.timer2;
+                    this.timer2 = setTimeout(() => {
+                        this.timer2 = null;
+                    }, 800);
+                    if (callNow) {
+                        this.message2 = this.keyword2;
+                    }
+                },
+                // 函数节流-时间戳版-立即执行
+                keyword3() {
+                    let now = Date.now();
+                    if (now - this.timer3 > 800) {
+                        this.message3 = this.keyword3;
+                        this.timer3 = now;
+                    }
+                },
+                // 函数节流-定时器版-非立即执行
+                keyword4() {
+                    if (!this.timer4) {
+                        this.timer4 = setTimeout(() => {
+                            this.timer4 = null;
+                            this.message4 = this.keyword4;
+                        }, 800);
+                    }
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>
